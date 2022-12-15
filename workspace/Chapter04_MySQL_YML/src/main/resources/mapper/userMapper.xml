@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="userSQL">
+  
+  	<insert id="write" parameterType="user">
+  		insert into usertable values(#{name}, #{id}, #{pwd})
+  	</insert>
+  	<select id="getList" resultType="user">
+  		select * from usertable
+  	</select>
+  	<select id="getUser" parameterType="java.lang.String" resultType="user">
+  		select * from usertable where id = #{id}
+  	</select>
+  	<update id="update" parameterType="java.util.Map">
+  		update usertable set name=#{name}, pwd=#{pwd} where id=#{id}
+  	</update>
+  	<delete id="delete" parameterType="java.lang.String">
+  	    <!-- MySQL에서는 반드시 from을 써야한다. -->
+  		delete from usertable where id=#{id}
+  	</delete>
+  	
+  	<select id="search" parameterType="java.util.Map" resultType="user"> 
+  		select * from usertable where ${order} like concat('%',#{search},'%')
+   	</select>
+  </mapper>
+  
+  <!-- 
+Oracle - 연결연산자(||)
+       - concat(인수, 인수) => 인수는 2개만 
+select * from usertable where ${searchOption} like '%' || #{keyword} || '%'
+
+MySQL - 연결연산자(||) 없다
+      - concat(인수, 인수) => 인수는 2개 이상 써도 된다 
+select * from usertable where ${searchOption} like concat('%', #{keyword}, '%')
+ -->
