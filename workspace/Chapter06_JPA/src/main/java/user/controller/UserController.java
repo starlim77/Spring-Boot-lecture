@@ -1,6 +1,7 @@
 package user.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,8 +60,14 @@ public class UserController {
 
 	@RequestMapping(value = "getUpdateUser")
 	@ResponseBody
-	public UserDTO getUpdateUser(@RequestParam String id) {
-		return userService.getUpdateUser(id);
+	public Optional<UserDTO> getUpdateUser(@RequestParam String id) {
+		Optional<UserDTO> userDTO = userService.getUpdateUser(id);
+		
+		System.out.println(userDTO);
+		
+		return userDTO;
+		
+	
 	}
 
 	@PostMapping(value = "update")

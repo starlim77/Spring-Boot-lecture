@@ -10,8 +10,8 @@ public class HelloTestApplication {
 		SpringApplication.run(HelloTestApplication.class, args);
 		
 		System.out.println("Hello Spring Boot");
-	}
-
+	}	
+	
 }
 
 /*
