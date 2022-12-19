@@ -26,11 +26,11 @@
 	<br>
 	<div style="width:450px; text-align:center;">
 		<form id="searchForm">
-			<select id="searchOption">
+			<select id="searchOption" name="searchOption">
 				<option value="name">이름</option>
 				<option value="id">아이디</option>
 			</select>
-			<input type="text" id="keyword">
+			<input type="text" id="keyword" name="keyword">
 			<input type="button" value="검색" id="searchBtn">
 		</form>
 	</div>
