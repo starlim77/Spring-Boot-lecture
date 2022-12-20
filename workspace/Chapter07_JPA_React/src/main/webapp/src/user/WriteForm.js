@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import cat from "../image/cat.jpg";
+import styles from "../css/writeForm.module.css";
 
 const WriteForm = () => {
     const [name, setName] = useState("");
@@ -39,6 +39,12 @@ const WriteForm = () => {
                     "http://localhost:8080/user/write",
                     "name=" + name + "&id=" + id + "&pwd=" + pwd
                 )
+                // .post(
+                //     "http://localhost:8080/user/write",null,{
+                // params:{id,name,pwd}
+                // }
+                //
+                // )
                 .then(() => {
                     alert("회원가입 완료");
                     navigate("/user/list");
@@ -47,15 +53,40 @@ const WriteForm = () => {
         }
     };
 
+    const onReset = () => {
+        setName("");
+        setId("");
+        setPwd("");
+    };
+
+    const checkId = () => {
+        if (id) {
+            axios
+                .post("http://localhost:8080/user/getUser", "id=" + id)
+                .then((res) => {
+                    setIdDiv(
+                        res.data === "YES"
+                            ? "사용 가능한 아이디"
+                            : "사용 불가능한 아이디"
+                    );
+                })
+                .catch((err) => console.log(err));
+        }
+    };
+
     return (
-        <div>
+        <div style={styles}>
             <h1>
                 <Link to="/">
-                    <img alt="cat" src={cat} style={{ width: "100px" }} />
+                    <img
+                        alt="cat"
+                        src="/image/cat.jpg"
+                        style={{ width: "100px" }}
+                    />
                 </Link>
                 회원가입
             </h1>
-            <form>
+            <form id={styles.writeForm}>
                 <table border="1">
                     <tbody>
                         <tr>
@@ -80,6 +111,7 @@ const WriteForm = () => {
                                     id="id"
                                     value={id}
                                     onChange={(e) => setId(e.target.value)}
+                                    onBlur={checkId}
                                 />
                                 <div id="idDiv">{idDiv}</div>
                             </td>
@@ -99,14 +131,18 @@ const WriteForm = () => {
                         </tr>
 
                         <tr>
-                            <td>
+                            <td colSpan="2" align="center">
                                 <input
                                     type="button"
                                     value="등록"
                                     id="signUpBtn"
                                     onClick={onSignUp}
                                 />
-                                <input type="reset" value="취소" />
+                                <input
+                                    type="reset"
+                                    value="취소"
+                                    onClick={onReset}
+                                />
                             </td>
                         </tr>
                     </tbody>

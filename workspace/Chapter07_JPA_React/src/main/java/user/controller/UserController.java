@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import user.bean.UserDTO;
 import user.service.UserService;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
 @RequestMapping(value = "user")
 public class UserController {
@@ -75,7 +75,7 @@ public class UserController {
 	
 	}
 
-	@PostMapping(value = "update")
+	@RequestMapping(value = "update")
 	@ResponseBody
 	public void update(@ModelAttribute UserDTO userDTO) {
 		userService.update(userDTO);
