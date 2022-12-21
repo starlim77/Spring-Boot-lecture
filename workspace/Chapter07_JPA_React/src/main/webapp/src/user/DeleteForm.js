@@ -8,9 +8,9 @@ const DeleteForm = () => {
 
     const onDelete = () => {
         axios
-            .post("http://localhost:8080/user/delete", "id=" + deleteId)
+            .delete(`http://localhost:8080/user/delete?id=${deleteId}`)
             .then(() => {
-                alert("삭제 완료");
+                alert("아이디 삭제 완료");
                 navigate("/user/list");
             })
             .catch((err) => console.log(err));
@@ -18,12 +18,10 @@ const DeleteForm = () => {
 
     const onGetUser = () => {
         axios
-            .post("http://localhost:8080/user/getUser", "id=" + deleteId)
+            .get(`http://localhost:8080/user/getUser?id=${deleteId}`)
             .then((res) => {
                 if (res.data === "YES") {
                     onDelete();
-                    alert("아이디 삭제 완료");
-                    navigate("/user/list");
                 } else {
                     alert("존재하지 않는 아이디입니다.");
                     setDeleteId("");

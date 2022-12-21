@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../css/writeForm.module.css";
 
+var canSignUp = false;
+
 const WriteForm = () => {
     const [name, setName] = useState("");
     const [id, setId] = useState("");
@@ -32,8 +34,8 @@ const WriteForm = () => {
             setPwdDiv("비밀번호 입력하세요");
             sw = 1;
         }
-
-        if (sw === 0) {
+        console.log(canSignUp);
+        if (sw === 0 && canSignUp) {
             axios
                 .post(
                     "http://localhost:8080/user/write",
@@ -50,6 +52,8 @@ const WriteForm = () => {
                     navigate("/user/list");
                 })
                 .catch((error) => console.log(error));
+        } else if (sw === 0 && !canSignUp) {
+            alert("가입할 수 없는 아이디 입니다.");
         }
     };
 
@@ -57,18 +61,23 @@ const WriteForm = () => {
         setName("");
         setId("");
         setPwd("");
+        setIdDiv("");
     };
 
     const checkId = () => {
         if (id) {
             axios
-                .post("http://localhost:8080/user/getUser", "id=" + id)
+                .get(`http://localhost:8080/user/getUser?id=${id}`)
                 .then((res) => {
+                    console.log(res.data);
                     setIdDiv(
-                        res.data === "YES"
+                        res.data === "NO"
                             ? "사용 가능한 아이디"
                             : "사용 불가능한 아이디"
                     );
+                    if (res.data === "NO") {
+                        canSignUp = true;
+                    }
                 })
                 .catch((err) => console.log(err));
         }
@@ -110,7 +119,10 @@ const WriteForm = () => {
                                     name="id"
                                     id="id"
                                     value={id}
-                                    onChange={(e) => setId(e.target.value)}
+                                    onChange={(e) => {
+                                        setId(e.target.value);
+                                        canSignUp = false;
+                                    }}
                                     onBlur={checkId}
                                 />
                                 <div id="idDiv">{idDiv}</div>

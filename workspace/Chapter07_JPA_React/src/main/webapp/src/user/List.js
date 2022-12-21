@@ -3,6 +3,21 @@ import React, { useEffect, useState } from "react";
 
 const List = () => {
     const [list, setList] = useState([]);
+    const [searchOption, setSearchOption] = useState("name");
+    const [keyword, setKeyword] = useState("");
+
+    const onSearch = (e) => {
+        e.preventDefault();
+        axios
+            .get("http://localhost:8080/user/search", {
+                params: {
+                    searchOption: searchOption,
+                    keyword,
+                },
+            })
+            .then((res) => setList(res.data))
+            .catch((err) => console.log(err));
+    };
 
     useEffect(() => {
         axios
@@ -35,6 +50,28 @@ const List = () => {
                     })}
                 </tbody>
             </table>
+            <br></br>
+            <br></br>
+            <div style={{ textAlign: "center" }}>
+                <form id="searchForm">
+                    <select
+                        name="searchOption"
+                        onChange={(e) => setSearchOption(e.target.value)}
+                    >
+                        <option value="name">이름</option>
+                        <option value="id">아이디</option>
+                    </select>
+                    &nbsp;
+                    <input
+                        type="text"
+                        name="keyword"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    ></input>
+                    &nbsp;
+                    <button onClick={onSearch}>검색</button>
+                </form>
+            </div>
         </div>
     );
 };

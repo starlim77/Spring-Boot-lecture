@@ -1,45 +1,31 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const UpdateForm = () => {
-    const [data, setData] = useState({
-        name: "",
-        id: "",
-        pwd: "",
-    });
+    const [data, setData] = useState({ name: "", id: "", pwd: "" });
+
+    const { name, id, pwd } = data;
+
     const [updateId, setUpdateId] = useState("");
 
     const navigate = useNavigate();
 
-    const { name, id, pwd } = data;
-
-    const onData = (e) => {
-        const { name, value } = e.target;
-
-        setData({
-            ...data,
-            [name]: value,
-        });
-    };
-
     const getUpdateUser = () => {
         if (updateId) {
             axios
-                .post(
-                    "http://localhost:8080/user/getUpdateUser",
-                    "id=" + updateId
-                )
+                .get(`http://localhost:8080/user/getUpdateUser?id=${updateId}`)
                 .then((res) => {
-                    if (res.data !== null) setData(res.data);
-                    else alert("존재하지 않는 아이디");
+                    if (res.data !== null) {
+                        setData(res.data);
+                    } else alert("존재하지 않는 아이디");
                 })
                 .catch((err) => console.log(err));
         }
     };
 
     const onUpdate = () => {
-        if (!data.id || !data.name || !data.pwd) {
+        if (!name || !id || !pwd) {
             alert("데이터를 입력해주세요.");
             return;
         }
@@ -55,8 +41,7 @@ const UpdateForm = () => {
     };
 
     const onReset = () => {
-        setUpdateId("");
-        setData({});
+        getUpdateUser();
     };
 
     return (
@@ -75,9 +60,9 @@ const UpdateForm = () => {
                 아이디 입력 :{" "}
                 <input
                     type="text"
-                    onChange={(e) => setUpdateId(e.target.value)}
                     onBlur={getUpdateUser}
                     value={updateId}
+                    onChange={(e) => setUpdateId(e.target.value)}
                 ></input>
                 <div></div>
                 <br></br>
@@ -91,7 +76,12 @@ const UpdateForm = () => {
                                     name="name"
                                     id="name"
                                     value={name}
-                                    onChange={(e) => onData(e)}
+                                    onChange={(e) =>
+                                        setData({
+                                            ...data,
+                                            name: e.target.value,
+                                        })
+                                    }
                                 />
                             </td>
                         </tr>
@@ -103,7 +93,6 @@ const UpdateForm = () => {
                                     name="id"
                                     id="id"
                                     value={id}
-                                    readOnly
                                 />
                             </td>
                         </tr>
@@ -115,7 +104,12 @@ const UpdateForm = () => {
                                     name="pwd"
                                     id="pwd"
                                     value={pwd}
-                                    onChange={(e) => onData(e)}
+                                    onChange={(e) =>
+                                        setData({
+                                            ...data,
+                                            pwd: e.target.value,
+                                        })
+                                    }
                                 />
                             </td>
                         </tr>
@@ -128,9 +122,9 @@ const UpdateForm = () => {
                                     onClick={onUpdate}
                                 />
                                 <input
-                                    type="reset"
-                                    value="취소"
+                                    type="button"
                                     onClick={onReset}
+                                    value="취소"
                                 />
                             </td>
                         </tr>
