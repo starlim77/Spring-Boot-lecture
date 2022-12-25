@@ -77,3 +77,41 @@ const List = () => {
 };
 
 export default List;
+
+
+
+import React from 'react';
+
+const List 
+= () => {
+
+    const abc1 = () => {}
+    function abc2(){
+    }
+
+
+
+    return (
+        <div>
+            
+        </div>
+    );
+};
+
+export default List;
+
+
+
+import React, { Component } from 'react';
+
+class List extends Component {
+    render() {
+        return (
+            <div>
+                
+            </div>
+        );
+    }
+}
+
+export default List;

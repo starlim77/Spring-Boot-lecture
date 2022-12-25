@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 
+@CrossOrigin
 @Controller
 @RequestMapping(value = "user")
 public class UserController2 {
@@ -132,21 +134,21 @@ public class UserController2 {
 	   @ResponseBody
 	   public String upload2(@RequestParam MultipartFile upload, HttpSession session) { //MultipartFile 의 이름과 데이터를 주느 input file의 name이 같아야함
 
-	      String filePath = session.getServletContext().getRealPath("/storage");
+	      String filePath = session.getServletContext().getRealPath("/public/storage");
 	      String fileName = upload.getOriginalFilename();
 	      System.out.println("실제폴더 = " + filePath);
-
+	      
 	      File file = new File(filePath, fileName);
-
+	      
 	      try {
 	    	  upload.transferTo(file);
 	      } catch (IOException e) {
-
+	    	  
 	         e.printStackTrace();
 	      }
-
+	      
 	      //DB
-	      return "<img src='../storage/" + fileName + "' width='300' height='300'/>";
+	      return "/storage/" + fileName;
 	   }
 
 
